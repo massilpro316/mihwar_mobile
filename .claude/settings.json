@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la \"C:/Users/windows/.claude/skills/\" 2>/dev/null)",
+      "Read(//c/Users/windows/.claude/skills/**)",
+      "Edit(~/.claude/skills/elder-friendly-ui/**)",
+      "Bash(python -c \"import xml.dom.minidom; xml.dom.minidom.parse\\('android/app/src/main/AndroidManifest.xml'\\); print\\('AndroidManifest.xml is valid XML'\\)\")"
+    ]
+  }
+}
