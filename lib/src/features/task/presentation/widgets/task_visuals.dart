@@ -41,6 +41,22 @@ extension TaskVisuals on TaskEntity {
       : 'task.stopped_by_station'.tr();
 }
 
+/// "Ahmed marked this task as done for you."
+extension TaskCompletedByVisuals on TaskEntity {
+  String get completedByMessage {
+    if (!doneByEmployee) return 'task.done_by_station_only'.tr();
+    final by = (completedByName ?? '').trim();
+    if (doneByStation) {
+      return by.isNotEmpty
+          ? 'task.completed_with_station_by'.tr(args: [by])
+          : 'task.completed_with_station'.tr();
+    }
+    return by.isNotEmpty
+        ? 'task.completed_by'.tr(args: [by])
+        : 'task.completed_by_station'.tr();
+  }
+}
+
 String taskStatusLabel(TaskStatus status) => switch (status) {
       TaskStatus.completed => 'task.status_completed'.tr(),
       TaskStatus.cancelled => 'task.status_cancelled'.tr(),

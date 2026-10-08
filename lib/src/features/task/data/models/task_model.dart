@@ -49,6 +49,10 @@ class TaskModel {
   final String? cancelledAt;
   final String? cancelReason;
   final String? cancelledByName;
+  final String? completedByName;
+  final String? completionNote;
+  final bool doneByEmployee;
+  final bool doneByStation;
   final TaskProductRecord? recordedProduct;
   final TaskDoseRecord? recordedDose;
 
@@ -68,6 +72,10 @@ class TaskModel {
     this.cancelledAt,
     this.cancelReason,
     this.cancelledByName,
+    this.completedByName,
+    this.completionNote,
+    this.doneByEmployee = true,
+    this.doneByStation = false,
     this.recordedProduct,
     this.recordedDose,
   });
@@ -89,6 +97,10 @@ class TaskModel {
       cancelledAt: json['cancelled_at']?.toString(),
       cancelReason: json['cancel_reason']?.toString(),
       cancelledByName: json['cancelled_by_name']?.toString(),
+      completedByName: json['completed_by_name']?.toString(),
+      completionNote: json['completion_note']?.toString(),
+      doneByEmployee: json['done_by_employee'] != false,
+      doneByStation: json['done_by_station'] == true,
       recordedProduct: productRecordFromJson(json['product']),
       recordedDose: doseRecordFromJson(json['dose']),
     );
@@ -110,6 +122,10 @@ class TaskModel {
         cancelledAt: cancelledAt,
         cancelReason: cancelReason,
         cancelledByName: cancelledByName,
+        completedByName: completedByName,
+        completionNote: completionNote,
+        doneByEmployee: doneByEmployee,
+        doneByStation: doneByStation,
         recordedProduct: recordedProduct,
         recordedDose: recordedDose,
       );

@@ -67,6 +67,19 @@ class TaskEntity extends Equatable {
   final String? cancelReason;
   final String? cancelledByName;
 
+  /// Set only when the station marked the task done on the employee's
+  /// behalf. See [isCompletedByStation].
+  final String? completedByName;
+
+  /// What the station wrote when marking it done for the employee.
+  final String? completionNote;
+
+  /// Who did the work, when the station logged the completion: the employee
+  /// themselves, the station, or both. An employee's own completion keeps the
+  /// defaults.
+  final bool doneByEmployee;
+  final bool doneByStation;
+
   /// What completing this task recorded on the farm — the material for a
   /// `product` task, the dose for a `dose` task. Null for an `other` task, a
   /// task never completed, or one completed before the server linked records
@@ -90,6 +103,10 @@ class TaskEntity extends Equatable {
     this.cancelledAt,
     this.cancelReason,
     this.cancelledByName,
+    this.completedByName,
+    this.completionNote,
+    this.doneByEmployee = true,
+    this.doneByStation = false,
     this.recordedProduct,
     this.recordedDose,
   });
@@ -100,6 +117,11 @@ class TaskEntity extends Equatable {
   /// it; the employee may only reply with a note.
   bool get isStoppedByStation =>
       status == TaskStatus.cancelled && cancelledAt != null;
+
+  /// The station marked this done for the employee. The server refuses to
+  /// reopen it; the employee may only add a note.
+  bool get isCompletedByStation =>
+      status == TaskStatus.completed && completedByName != null;
 
   bool get hasNote => (note ?? '').trim().isNotEmpty;
 
@@ -130,6 +152,10 @@ class TaskEntity extends Equatable {
         cancelledAt: clearCancellation ? null : cancelledAt,
         cancelReason: clearCancellation ? null : cancelReason,
         cancelledByName: clearCancellation ? null : cancelledByName,
+        completedByName: completedByName,
+        completionNote: completionNote,
+        doneByEmployee: doneByEmployee,
+        doneByStation: doneByStation,
         recordedProduct: recordedProduct ?? this.recordedProduct,
         recordedDose: recordedDose ?? this.recordedDose,
       );
@@ -146,6 +172,10 @@ class TaskEntity extends Equatable {
         completedAt,
         cancelledAt,
         cancelReason,
+        completedByName,
+        completionNote,
+        doneByEmployee,
+        doneByStation,
         recordedProduct,
         recordedDose,
       ];

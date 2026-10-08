@@ -1,5 +1,25 @@
+# Source art lives in assets/logo/app_icon/, generated from logo_mobile.jpeg
+# (black background keyed out). Regenerate with:
+#   dart run flutter_launcher_icons
 flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/logo/logo_mobile.jpeg"
+  # Legacy full-bleed icon (Android < 8) and the default iOS icon.
+  image_path: "assets/logo/app_icon/icon.png"
 
+  android: "launcher_icon"
+  min_sdk_android: 21
+  # Adaptive icon (Android 8+): transparent foreground kept inside the safe
+  # zone, so every launcher mask (circle, squircle, teardrop) crops cleanly.
+  adaptive_icon_background: "#000000"
+  adaptive_icon_foreground: "assets/logo/app_icon/icon_foreground.png"
+  # The art already carries its safe-zone padding; no extra inset.
+  adaptive_icon_foreground_inset: 0
+  # Themed icon (Android 13+): single-colour silhouette tinted by the wallpaper.
+  adaptive_icon_monochrome: "assets/logo/app_icon/icon_monochrome.png"
+
+  ios: true
+  # App Store icons must be opaque.
+  remove_alpha_ios: true
+  # iOS 18 appearance variants.
+  image_path_ios_dark_transparent: "assets/logo/app_icon/icon_ios_dark.png"
+  image_path_ios_tinted_grayscale: "assets/logo/app_icon/icon_ios_tinted.png"
+  desaturate_tinted_to_grayscale_ios: true

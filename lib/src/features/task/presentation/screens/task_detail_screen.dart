@@ -170,6 +170,10 @@ class _TaskDetailViewState extends State<_TaskDetailView> {
                       SizedBox(height: AppSpacing.md),
                       _StoppedNotice(task: task),
                     ],
+                    if (task.isCompletedByStation) ...[
+                      SizedBox(height: AppSpacing.md),
+                      _CompletedByNotice(task: task),
+                    ],
                     SizedBox(height: AppSpacing.lg),
                     Text(
                       task.title,
@@ -315,6 +319,62 @@ class _StatusBanner extends StatelessWidget {
 }
 
 /// "Ahmed stopped this task — no need to do it. Reason: …"
+/// The station marked this task done for the employee.
+class _CompletedByNotice extends StatelessWidget {
+  const _CompletedByNotice({required this.task});
+
+  final TaskEntity task;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        color: context.appColors.success.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(AppSpacing.ms),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.verified_rounded,
+            size: 32.r,
+            color: context.appColors.success,
+          ),
+          SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  task.completedByMessage,
+                  style: context.textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: context.colors.onSurface,
+                    height: 1.4,
+                  ),
+                ),
+                if ((task.completionNote ?? '').trim().isNotEmpty) ...[
+                  SizedBox(height: AppSpacing.xs),
+                  Text(
+                    'task.completion_note'
+                        .tr(args: [task.completionNote!.trim()]),
+                    style: context.textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: context.colors.onSurface,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _StoppedNotice extends StatelessWidget {
   const _StoppedNotice({required this.task});
 
@@ -618,7 +678,8 @@ class _Actions extends StatelessWidget {
       onPressed: busy ? null : onNote,
     );
 
-    if (task.isStoppedByStation) return noteButton;
+    // Stopped or completed by the station: the server refuses a reopen.
+    if (task.isStoppedByStation || task.isCompletedByStation) return noteButton;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
